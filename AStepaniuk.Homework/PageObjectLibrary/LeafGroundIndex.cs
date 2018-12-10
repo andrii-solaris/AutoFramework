@@ -11,7 +11,9 @@ namespace Stepaniuk.Homework.PageObjectLibrary
     {
      public void NewTabClickHyperLink()
         {
-            base.NewTabTargetClick("xpath=//h5[text()='HyperLink']/..");
+            base.PressControlKey();
+            base.Click("xpath=//h5[text()='HyperLink']/..");
+            base.ReleaseControlKey();
         }                           
     }
 }

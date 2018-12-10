@@ -329,10 +329,17 @@ namespace Stepaniuk.Homework.Utils
             return thisUrl;            
         }
 
-        public void NewTabTargetClick(string locator)
+        
+        public void PressControlKey()
         {
-            Log.Information($"Opening the following element by performing click action in a new tab by its locator {locator}");
-            new Actions(_driver).KeyDown(Keys.Control).Click(_driver.FindElement(ProcessLocator(locator))).Perform(); 
+            Log.Information($"Pressing 'Control' key.");
+            new Actions(_driver).KeyDown(Keys.Control).Perform();            
+        }
+
+        public void ReleaseControlKey()
+        {
+            Log.Information($"Releasing 'Control' key.");
+            new Actions(_driver).KeyUp(Keys.Control).Perform();
         }
 
         public void Hover(string locator)
@@ -348,6 +355,8 @@ namespace Stepaniuk.Homework.Utils
             var currentDirectory = $@"{System.IO.Directory.GetParent(Path.GetDirectoryName(Path.GetDirectoryName(TestContext.CurrentContext.WorkDirectory)))}\TestResults";
             var screenshotPath = Path.Combine(currentDirectory, Constants.Directory, "screenshot.png");
 
+            Log.Information($"Taking screenshot and saving it to {screenshotPath}");
+
             screenshot.SaveAsFile(screenshotPath);
 
             TestContext.AddTestAttachment(screenshotPath);
@@ -355,17 +364,32 @@ namespace Stepaniuk.Homework.Utils
 
         public void SwitchToWindow(int windowIndex)
         {
+            Log.Information($"Switching to window/tab by its index: {windowIndex}");
             _driver.SwitchTo().Window(_driver.WindowHandles[windowIndex]);
         }
 
-        public void SwitchToDefaultWindow()
+        public void SwitchToDefaultContent()
         {
+            Log.Information("Switching to default window...");
             _driver.SwitchTo().DefaultContent();
         }
 
         public void CloseCurrentWindow()
         {
+            Log.Information("Closing current window...");
             _driver.Close();
+        }
+
+        public void SwitchToFrame(string locator)
+        {
+            Log.Information($"Switching to frame by its locator: {locator}");
+            _driver.SwitchTo().Frame(_driver.FindElement(ProcessLocator(locator)));
+        }
+
+        public void DragAndDrop(string draggableElement, string targetElement)
+        {
+            Log.Information($"Dragging element by locator: {draggableElement} to its target element by locator: {targetElement}");
+            new Actions(_driver).DragAndDrop(_driver.FindElement(ProcessLocator(draggableElement)), _driver.FindElement(ProcessLocator(targetElement))).Perform();
         }
     }
 }

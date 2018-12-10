@@ -1,10 +1,12 @@
-﻿using OpenQA.Selenium;
+﻿using NUnit.Framework;
+using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.IE;
 using Serilog;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 
 namespace Stepaniuk.Homework.Utils
 {
@@ -32,7 +34,15 @@ namespace Stepaniuk.Homework.Utils
                 case "Firefox":
                     if (Driver == null)
                     {
-                        _driver = new FirefoxDriver();
+                        var options = new FirefoxOptions();
+
+                        if (ConfigurationManager.AppSettings["HeadlessMode"].Equals("True") ||
+                            (TestContext.Parameters["HeadlessMode"] != null && TestContext.Parameters["HeadlessMode"].Equals("True")))
+                        {
+                            options.AddArguments("-headless");
+                        }
+
+                        _driver = new FirefoxDriver(options);
                         _driverDictionary.Add("Firefox", Driver);
                     }
                     break;
@@ -47,8 +57,17 @@ namespace Stepaniuk.Homework.Utils
 
                 case "Chrome":
                     if (Driver == null)
-                    {
-                        _driver = new ChromeDriver();
+                    { 
+
+                    var options = new ChromeOptions();
+
+                        if (ConfigurationManager.AppSettings["HeadlessMode"].Equals("True") || 
+                            (TestContext.Parameters["HeadlessMode"] != null && TestContext.Parameters["HeadlessMode"].Equals("True")))
+                        {
+                            options.AddArguments("-headless");                           
+                        }
+
+                        _driver = new ChromeDriver(options);
                         _driverDictionary.Add("Chrome", Driver);
                     }
                     break;
@@ -57,7 +76,9 @@ namespace Stepaniuk.Homework.Utils
             Log.Information($"Initializing {driverType} driver...");
             _driver.Manage().Window.Maximize();
             Log.Debug("Setting browser window to maximum...");
-        }       
+        }
+        
+
 
         public static void CloseAllDrivers()
         {
