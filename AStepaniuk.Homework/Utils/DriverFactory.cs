@@ -29,6 +29,9 @@ namespace Stepaniuk.Homework.Utils
 
         public static void InstantiateDriver(string driverType)
         {
+
+            var browserOptions = ConfigurationManager.AppSettings["DriverOptions"].Split(',');
+
             switch (driverType)
             {
                 case "Firefox":
@@ -39,11 +42,19 @@ namespace Stepaniuk.Homework.Utils
                         if (ConfigurationManager.AppSettings["HeadlessMode"].Equals("True") ||
                             (TestContext.Parameters["HeadlessMode"] != null && TestContext.Parameters["HeadlessMode"].Equals("True")))
                         {
-                            options.AddArguments("-headless");
-                        }
+                            options.AddArgument("-headless");
+                        }                       
+
+                        options.Profile = new FirefoxProfile();
+                        options.Profile.SetPreference("browser.download.dir", $@"{Constants.CurrentDirectory}\Downloads");
+                        options.Profile.SetPreference("browser.download.folderList", 2);
+                        options.Profile.SetPreference("browser.helperApps.neverAsk.saveToDisk", "image/jpeg");
 
                         _driver = new FirefoxDriver(options);
                         _driverDictionary.Add("Firefox", Driver);
+
+                        _driver.Manage().Window.Maximize();
+
                     }
                     break;
 
@@ -64,18 +75,26 @@ namespace Stepaniuk.Homework.Utils
                         if (ConfigurationManager.AppSettings["HeadlessMode"].Equals("True") || 
                             (TestContext.Parameters["HeadlessMode"] != null && TestContext.Parameters["HeadlessMode"].Equals("True")))
                         {
-                            options.AddArguments("-headless");                           
+                            options.AddArgument("-headless");                           
                         }
 
+                        foreach (var option in browserOptions)
+                        {
+                            options.AddArgument(option);
+                        }
+
+                        options.AddUserProfilePreference("download.default_directory", $@"{Constants.CurrentDirectory}\Downloads");
+                        options.AddUserProfilePreference("download.prompt_for_download", false);
+                        options.AddUserProfilePreference("disable-popup-blocking", "true");
+
                         _driver = new ChromeDriver(options);
-                        _driverDictionary.Add("Chrome", Driver);
+                        _driverDictionary.Add("Chrome", Driver);                      
+
                     }
                     break;
             }
 
-            Log.Information($"Initializing {driverType} driver...");
-            _driver.Manage().Window.Maximize();
-            Log.Debug("Setting browser window to maximum...");
+            Log.Information($"Initializing {driverType} driver...");            
         }
         
 

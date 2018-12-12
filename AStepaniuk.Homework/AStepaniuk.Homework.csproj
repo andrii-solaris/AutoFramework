@@ -154,6 +154,7 @@
     <Compile Include="PageObjectLibrary\JQueryDroppablePage.cs" />
     <Compile Include="PageObjectLibrary\JQueryIndexPage.cs" />
     <Compile Include="PageObjectLibrary\LeafGroundIndex.cs" />
+    <Compile Include="PageObjectLibrary\UnsplashTestPage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tests\AdvancedSeleniumSuite.cs" />
     <Compile Include="Tests\TestSuiteUtils.cs" />

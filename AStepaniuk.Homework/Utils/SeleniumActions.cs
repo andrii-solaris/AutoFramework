@@ -352,7 +352,7 @@ namespace Stepaniuk.Homework.Utils
         {
            Screenshot screenshot = ((ITakesScreenshot)_driver).GetScreenshot();
 
-            var currentDirectory = $@"{System.IO.Directory.GetParent(Path.GetDirectoryName(Path.GetDirectoryName(TestContext.CurrentContext.WorkDirectory)))}\TestResults";
+            var currentDirectory = $@"{Constants.CurrentDirectory}\TestResults";
             var screenshotPath = Path.Combine(currentDirectory, Constants.Directory, "screenshot.png");
 
             Log.Information($"Taking screenshot and saving it to {screenshotPath}");
@@ -390,6 +390,35 @@ namespace Stepaniuk.Homework.Utils
         {
             Log.Information($"Dragging element by locator: {draggableElement} to its target element by locator: {targetElement}");
             new Actions(_driver).DragAndDrop(_driver.FindElement(ProcessLocator(draggableElement)), _driver.FindElement(ProcessLocator(targetElement))).Perform();
+        }
+
+        public void FluentScroll(string locator)
+        {
+            IJavaScriptExecutor jsExecutor = (IJavaScriptExecutor)_driver; 
+            IWebElement elementFound;
+
+            while (true)
+            {
+                if (_driver.FindElements(ProcessLocator(locator)).Count != 0)
+                {
+                    elementFound = _driver.FindElement(ProcessLocator(locator));
+                    Log.Information($"Element by locator {locator} has been found!");
+                    break;
+                }
+
+                long prevScrollTop = (long)jsExecutor.ExecuteScript("return window.scrollY");
+
+                jsExecutor.ExecuteScript("window.scrollBy(0, 200)");
+
+                Log.Information("Scrolling page down by 200 px");
+
+                long scrollTop = (long)jsExecutor.ExecuteScript("return window.scrollY");
+
+                if (prevScrollTop == scrollTop)
+                    throw new NoSuchElementException("List does not contain this element");
+            }
+
+            jsExecutor.ExecuteScript("arguments[0].scrollIntoView()", elementFound);
         }
     }
 }

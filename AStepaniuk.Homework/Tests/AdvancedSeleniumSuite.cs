@@ -8,6 +8,8 @@ using Stepaniuk.Homework.Utils;
 using Stepaniuk.Homework.PageObjectLibrary;
 using Serilog;
 using NUnit.Framework.Interfaces;
+using System.Threading;
+using System.IO;
 
 namespace Stepaniuk.Homework.Tests
 {
@@ -15,6 +17,15 @@ namespace Stepaniuk.Homework.Tests
     [Author("astepaniuk")]
     class AdvancedSeleniumSuite : SeleniumActions
     {
+
+        [SetUp] 
+        public void ClearDownloadsDirectory()
+        {
+            if (Directory.Exists($@"{Constants.CurrentDirectory}\Downloads")) 
+                {
+                    Directory.Delete($@"{Constants.CurrentDirectory}\Downloads", true);
+                }            
+        }
 
         [Test]
         [Order(1)]
@@ -44,6 +55,19 @@ namespace Stepaniuk.Homework.Tests
             base.ValidateText("xpath=//div[@id='droppable']/p", "Dropped!");
         }
 
+        [Test]
+        [Order(3)]
+        public void ScrollToLastPicture()
+        {
+            base.GoToPage("https://unsplash.com/search/photos/test");
+            Assert.That(base.GetCurrentUrl(), Is.EqualTo("https://unsplash.com/search/photos/test"));
+            new UnsplashTestPage().ScrollToElement();            
+            new UnsplashTestPage().DownloadLastPicture();
+            Thread.Sleep(4000);
+            Assert.That(Directory.GetFiles($@"{Constants.CurrentDirectory}\Downloads", "the-roaming-platypus-529026-unsplash.jpg"), Is.Not.Empty);
+
+        }
+
         public void TearDown()
         {
 
@@ -57,6 +81,9 @@ namespace Stepaniuk.Homework.Tests
             else if (TestContext.CurrentContext.Result.Outcome.Status == TestStatus.Passed)
             {
                 Log.Debug("Test passed!");
+                var unsplashPage = new UnsplashTestPage();
+                unsplashPage.ScrollToElement();
+                unsplashPage.DownloadLastPicture();
             }            
         }
     }

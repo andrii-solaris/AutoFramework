@@ -22,7 +22,7 @@ namespace Stepaniuk.Homework.Tests
         public void RunBeforeTestSuite()
 
         {            
-            var currentDirectory = $@"{System.IO.Directory.GetParent(Path.GetDirectoryName(Path.GetDirectoryName(TestContext.CurrentContext.WorkDirectory)))}\TestResults";
+            var currentDirectory = $@"{Constants.CurrentDirectory}\TestResults";
             var logFilePath = Path.Combine(currentDirectory, Constants.Directory, "logs.txt");
             var detailedLogFilePath = Path.Combine(currentDirectory, Constants.Directory, "detailedLogs.txt");
             var template = "[{Timestamp:HH:mm:ss} {Level:u3}] [{ProcessId}] {Message:lj}{NewLine}{Exception}";
