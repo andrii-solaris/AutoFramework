@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.IO;
+using FluentAssertions;
 
 namespace Stepaniuk.Homework.Utils
 {
@@ -285,13 +286,11 @@ namespace Stepaniuk.Homework.Utils
             Log.Information($"Dropdown element was selected by index: {index}");
         }
 
-        public void FillAndSubmitSingleFieldForm(string locator, string text)
+        public void SubmitForm(string locator)
         {
             WaitFor(locator);
 
-            var element = _driver.FindElement(ProcessLocator(locator));
-
-            element.SendKeys(text);
+            var element = _driver.FindElement(ProcessLocator(locator));            
 
             element.Submit();
         }
@@ -317,9 +316,9 @@ namespace Stepaniuk.Homework.Utils
         public void ValidateText(string locator, string expectedValue)
         {
             WaitFor(locator);
-            var element = _driver.FindElement(ProcessLocator(locator));
-            Log.Information($"Checking if the text {element.Text} of the element {locator} is equal to expected one: {expectedValue}");
-            Assert.That(element.Text, Is.EqualTo(expectedValue));
+            var element = _driver.FindElement(ProcessLocator(locator)).Text;
+            Log.Information($"Checking if the text {element} of the element {locator} is equal to expected one: {expectedValue}");
+            element.Should().Contain(expectedValue);
         }
 
         public string GetCurrentUrl()
