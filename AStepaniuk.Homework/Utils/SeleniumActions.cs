@@ -16,6 +16,7 @@ namespace Stepaniuk.Homework.Utils
     {
         private IWebDriver _driver;
         private WebDriverWait Wait;
+        public readonly string Warning;
 
         public SeleniumActions()
         {
