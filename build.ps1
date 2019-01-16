@@ -24,7 +24,7 @@ param
     [String] $Platform = "Any CPU",
 
     [Parameter()]
-    [String] $OutputPath ="AStepaniuk.Homework/bin/Debug"
+    [String] $OutputPath ="AStepaniuk.Homework/AStepaniuk.Homework/bin/Debug"
 )
 
 $NugetUrl = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
@@ -61,7 +61,7 @@ Function BuildSolution()
     Write-Output "Building '$Solution' solution..."
 
     # MSBuild.exe call here
-    & $MSBuildExe $Solution 
+    & $MSBuildExe $Solution /p:Configuration=$Configuration /p:Platform=$Platform
      if($LASTEXITCODE -ne 0){
         Throw "An error occured while building solution."
     }
