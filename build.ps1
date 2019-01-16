@@ -98,7 +98,7 @@ Function CopyBuildArtifacts()
 
     New-Item -Path $DestinationFolder -ItemType "directory"
 
-    Copy-item -Force -Recurse -Verbose $SourceFolder -Destination $DestinationFolder
+    Copy-item -Force -Recurse -Verbose $OutputPath -Destination $DestinationFolder
 }
 
 foreach ($Task in $TaskList) {
