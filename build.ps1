@@ -24,7 +24,7 @@ param
     [String] $Platform = "Any CPU",
 
     [Parameter()]
-    [String] $OutputPath
+    [String] $OutputPath ="AStepaniuk.Homework/bin/Debug"
 )
 
 $NugetUrl = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
@@ -61,7 +61,7 @@ Function BuildSolution()
     Write-Output "Building '$Solution' solution..."
 
     # MSBuild.exe call here
-    & $MSBuildExe $Solution /p:Configuration=$Configuration /p:Platform=$Platform
+    & $MSBuildExe $Solution /p:Configuration=$Configuration /p:Platform=$Platform /p:OutputPath=$OutputPath
 
      if($LASTEXITCODE -ne 0){
         Throw "An error occured while building solution."
@@ -109,6 +109,6 @@ foreach ($Task in $TaskList) {
     }
     if ($Task.ToLower() -eq 'copyartifacts')
     {
-        CopyBuildArtifacts "YOUR FOLDER WITH BUILT DLLS" "$BuildArtifactsFolder"
+        CopyBuildArtifacts $OutputPath $BuildArtifactsFolder
     }
 }

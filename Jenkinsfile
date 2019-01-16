@@ -6,7 +6,6 @@ properties([
 
 def isFailed = false
 def branch = params.branchName
-def artifactsFolder = "AStepaniuk.Homework/bin/Debug"
 def buildArtifactsFolder = "C:/BuildPackagesFromPipeline/$BUILD_ID"
 currentBuild.description = "Branch: $branch"
 
@@ -41,7 +40,7 @@ node('master')
 
     stage('Copy Artifacts')
     {
-        powershell ".\\build.ps1 CopyBuildArtifacts $artifactsFolder $buildArtifactsFolder"
+        powershell ".\\build.ps1 CopyBuildArtifacts -BuildArtifactsFolder $buildArtifactsFolder"
     }
 }
 
