@@ -18,10 +18,10 @@ param
     [String] $BuildArtifactsFolder,
 
     [Parameter()]
-    [String] $Configuration,
+    [String] $Configuration = "Debug",
 
     [Parameter()]
-    [String] $Platform,
+    [String] $Platform = "Any CPU",
 
     [Parameter()]
     [String] $OutputPath
