@@ -36,7 +36,7 @@ node('master')
 
     stage('Build Solution')
     {
-        powershell ".\\build.ps1 BuildSolution -Configuration 'Debug' -Platform 'Any CPU'"
+        powershell ".\\build.ps1 BuildSolution 'Debug' 'Any CPU'"
     }
 
     stage('Copy Artifacts')
