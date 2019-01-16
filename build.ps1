@@ -91,10 +91,9 @@ Function CopyBuildArtifacts()
     #           Get-ChildItem ... | Copy-Item ...
     #
     #           which will get items (Get-ChildItem) and will copy them (Copy-Item) to the target folder
-
-    if(Test-Path $SourceFolder){
-        Get-ChildItem $SourceFolder | Copy-Item -Destination $DestinationFolder
-    } 
+   
+    Get-ChildItem $SourceFolder | Copy-Item -Destination $DestinationFolder
+    
 }
 
 foreach ($Task in $TaskList) {
