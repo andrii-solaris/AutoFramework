@@ -41,7 +41,7 @@ node('master')
 
     stage('Copy Artifacts')
     {
-        powershell ".\\build.ps1 CopyBuildArtifacts -SourceFolder $artifactsFolder -BuildArtifactsFolder $buildArtifactsFolder"
+        powershell ".\\build.ps1 CopyBuildArtifacts $artifactsFolder $buildArtifactsFolder"
     }
 }
 
